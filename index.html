@@ -17,15 +17,64 @@
     </style>
   </head>
 
-  <script>
-    function handleWebSocket() {
-      const socket = io("localhost:3000");
-    }
-  </script>
-
   <body>
-    <div class="container" onclick="handleWebSocket()">
-      <button class="btn btn-primary">WebSocket</button>
+    <div class="container">
+      <button onclick="handleWebSocket()" class="btn btn-primary">
+        WebSocket
+      </button>
+      <button onclick="handleWebTransport()" class="btn btn-primary">
+        WebTransport
+      </button>
+      <p>Status: <span id="status">Disconnected</span></p>
+      <p>Transport: <span id="transport">N/A</span></p>
     </div>
   </body>
+  <script>
+    const $status = document.getElementById("status");
+    const $transport = document.getElementById("transport");
+
+    function handleWebSocket() {
+      const socket = io("localhost:3000");
+
+      socket.on("connect", () => {
+        console.log(
+          `connected with transport ${socket.io.engine.transport.name}`
+        );
+
+        $status.innerText = "Connected";
+        $transport.innerText = socket.io.engine.transport.name;
+
+        socket.io.engine.on("upgrade", (transport) => {
+          console.log(`transport upgraded to ${transport.name}`);
+
+          $transport.innerText = transport.name;
+        });
+      });
+    }
+
+    function handleWebTransport() {
+      const socket = io("localhost:1337", {
+        transportOptions: {
+          webtransport: {
+            hostname: "127.0.0.1",
+          },
+        },
+      });
+
+      socket.on("connect", () => {
+        console.log(
+          `connected with transport ${socket.io.engine.transport.name}`
+        );
+
+        $status.innerText = "Connected";
+        $transport.innerText = socket.io.engine.transport.name;
+
+        socket.io.engine.on("upgrade", (transport) => {
+          console.log(`transport upgraded to ${transport.name}`);
+
+          $transport.innerText = transport.name;
+        });
+      });
+    }
+  </script>
 </html>
