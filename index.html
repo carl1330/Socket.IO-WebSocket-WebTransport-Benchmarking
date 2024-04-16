@@ -9,21 +9,23 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
     <style>
       body {
         padding-top: 50px;
       }
     </style>
   </head>
-  <script src="/socket.io/socket.io.js"></script>
+
   <script>
-    const socket = io();
+    function handleWebSocket() {
+      const socket = io("localhost:3000");
+    }
   </script>
+
   <body>
-    <div class="container">
-      <div class="jumbotron">
-        <h1>res.sendFile() Works!</h1>
-      </div>
+    <div class="container" onclick="handleWebSocket()">
+      <button class="btn btn-primary">WebSocket</button>
     </div>
   </body>
 </html>

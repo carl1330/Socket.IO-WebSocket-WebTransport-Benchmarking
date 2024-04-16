@@ -1,14 +1,30 @@
-const express = require("express");
-const { createServer } = require("node:http");
-const { join } = require("node:path");
+import { readFile } from "node:fs/promises";
+import { createServer } from "node:https";
 
-const app = express();
-const server = createServer(app);
+const key = await readFile("./key.pem");
+const cert = await readFile("./cert.pem");
 
-app.get("/", (req, res) => {
-  res.sendFile(join(__dirname, "index.html"));
-});
+const httpsServer = createServer(
+  {
+    key,
+    cert,
+  },
+  async (req, res) => {
+    if (req.method === "GET" && req.url === "/") {
+      const content = await readFile("./index.html");
+      res.writeHead(200, {
+        "content-type": "text/html",
+      });
+      res.write(content);
+      res.end();
+    } else {
+      res.writeHead(404).end();
+    }
+  }
+);
 
-server.listen(3000, () => {
-  console.log("server running at http://localhost:3000");
+const port = process.env.PORT || 8080;
+
+httpsServer.listen(port, () => {
+  console.log(`server listening at https://localhost:${port}`);
 });
