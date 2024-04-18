@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { createServer } from "node:https";
 
-const key = await readFile("./key.pem");
+const key = await readFile("./key.key");
 const cert = await readFile("./cert.pem");
 
 const httpsServer = createServer(

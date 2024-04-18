@@ -3,7 +3,7 @@ import { createServer } from "node:https";
 import { Server } from "socket.io";
 import { Http3Server } from "@fails-components/webtransport";
 
-const key = await readFile("./key.pem");
+const key = await readFile("./key.key");
 const cert = await readFile("./cert.pem");
 
 const httpsServer = createServer({
