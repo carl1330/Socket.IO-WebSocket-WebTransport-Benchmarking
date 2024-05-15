@@ -1,80 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Sample Site</title>
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-      crossorigin="anonymous"
-    />
-    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-    <style>
-      body {
-        padding-top: 50px;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="container">
-      <button onclick="handleWebSocket()" class="btn btn-primary">
-        WebSocket
-      </button>
-      <button onclick="handleWebTransport()" class="btn btn-primary">
-        WebTransport
-      </button>
-      <p>Status: <span id="status">Disconnected</span></p>
-      <p>Transport: <span id="transport">N/A</span></p>
+<head></head>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script
+  src="https://cdn.socket.io/4.7.5/socket.io.min.js"
+  integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO"
+  crossorigin="anonymous"
+></script>
+<script></script>
+<body>
+  <button id="websocket">WebSocket</button>
+  <button id="webtransport">WebTransport</button>
+  <button id="webtransport-datagram">WebTransport Datagram</button>
+  <div class="card" style="height: 500px; width: 550px">
+    <div class="card-body">
+      <h5 class="card-title">Stats</h5>
+      <canvas id="chartCanvas"></canvas>
     </div>
-  </body>
-  <script>
-    const $status = document.getElementById("status");
-    const $transport = document.getElementById("transport");
-
-    function handleWebSocket() {
-      const socket = io("localhost:3000");
-
-      socket.on("connect", () => {
-        console.log(
-          `connected with transport ${socket.io.engine.transport.name}`
-        );
-
-        $status.innerText = "Connected";
-        $transport.innerText = socket.io.engine.transport.name;
-
-        socket.io.engine.on("upgrade", (transport) => {
-          console.log(`transport upgraded to ${transport.name}`);
-
-          $transport.innerText = transport.name;
-        });
-      });
-    }
-
-    function handleWebTransport() {
-      const socket = io("localhost:1337", {
-        transportOptions: {
-          webtransport: {
-            hostname: "127.0.0.1",
-          },
-        },
-      });
-
-      socket.on("connect", () => {
-        console.log(
-          `connected with transport ${socket.io.engine.transport.name}`
-        );
-
-        $status.innerText = "Connected";
-        $transport.innerText = socket.io.engine.transport.name;
-
-        socket.io.engine.on("upgrade", (transport) => {
-          console.log(`transport upgraded to ${transport.name}`);
-
-          $transport.innerText = transport.name;
-        });
-      });
-    }
-  </script>
-</html>
+  </div>
+</body>
+<script src="common.js"></script>
+<script src="ws-benchmark.js"></script>
+<script src="wt-benchmark.js"></script>
+<script src="wt-datagram-benchmark.js"></script>

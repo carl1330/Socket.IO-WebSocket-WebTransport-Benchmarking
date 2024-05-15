@@ -4,7 +4,7 @@ HASH=`openssl x509 -pubkey -noout -in cert.pem |
     openssl dgst -sha256 -binary |
     base64`
 
-flatpak run com.github.Eloston.UngoogledChromium\
+chromium-browser \
     --ignore-certificate-errors-spki-list=$HASH \
-    --origin-to-force-quic-on=127.0.0.1:1337 \
+    --origin-to-force-quic-on=127.0.0.1:8080\
     https://localhost:8080
